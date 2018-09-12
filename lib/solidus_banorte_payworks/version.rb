@@ -1,3 +1,3 @@
 module SolidusBanortePayworks
-  VERSION = '2.5.0.alpha'
+  VERSION = '0.1'
 end
