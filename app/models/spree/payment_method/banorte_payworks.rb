@@ -26,7 +26,11 @@ module Spree
     end
 
     def auto_capture?
-      false
+      true
+    end
+
+    def actions
+      %w(authorize capture void credit)
     end
   end
 end

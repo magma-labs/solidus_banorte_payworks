@@ -4,7 +4,7 @@ module Spree
 
     BANORTE_PAYWORKS_URL = 'https://via.pagosbanorte.com/payw2'
 
-    def authorize(amount, source, gateway_options)
+    def purchase(amount, source, gateway_options)
       payload = {
           REFERENCE: source.gateway_payment_profile_id,
           CMD_TRANS: 'POSTAUTORIZACION',
@@ -30,12 +30,13 @@ module Spree
           MONTO: payment.amount.to_s
       }
       result = perform(payload)
+      binding.pry
       if result.success?
         payment.source.update_attribute(:gateway_payment_profile_id, result.params['authorization'])
       end
     end
 
-    def credit(amount, source, gateway_options)
+    def credit(amount, source, gateway_options, origin)
       payload = {
           REFERENCE: source.gateway_payment_profile_id,
           CMD_TRANS: 'DEVOLUCION',
@@ -75,6 +76,7 @@ module Spree
         request.body = base_params.merge(payload).to_query
 
         response = http.request(request)
+        binding.pry
         gateway_result = response.header['resultado_payw']
         case gateway_result
           when 'A'
@@ -98,7 +100,7 @@ module Spree
     end
 
     def gateway_mode
-      test_mode ? 'AUT' : 'PRD'
+      test_mode ? 'DEC' : 'PRD'
     end
 
   end
