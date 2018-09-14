@@ -80,10 +80,10 @@ module Spree
         response = http.request(request)
         gateway_result = response.header['resultado_payw']
         case gateway_result
-          when 'A'
-            ActiveMerchant::Billing::Response.new(true, {}, {authorization: response.header['referencia']})
-          when 'D', 'R', 'T'
-            ActiveMerchant::Billing::Response.new(false, CGI.unescape(response.header['texto']), {})
+        when 'A'
+          ActiveMerchant::Billing::Response.new(true, {}, {authorization: response.header['referencia']})
+        when 'D', 'R', 'T'
+          ActiveMerchant::Billing::Response.new(false, CGI.unescape(response.header['texto']), {})
         end
       rescue Exception => e
         ActiveMerchant::Billing::Response.new(false, {}, {})
