@@ -30,9 +30,11 @@ module Spree
           MONTO: payment.amount.to_s
       }
       result = perform(payload)
-      binding.pry
       if result.success?
         payment.source.update_attribute(:gateway_payment_profile_id, result.params['authorization'])
+      else
+        payment.invalidate!
+        raise ::Spree::Core::GatewayError.new(result.message)
       end
     end
 
@@ -76,7 +78,6 @@ module Spree
         request.body = base_params.merge(payload).to_query
 
         response = http.request(request)
-        binding.pry
         gateway_result = response.header['resultado_payw']
         case gateway_result
           when 'A'
@@ -100,7 +101,7 @@ module Spree
     end
 
     def gateway_mode
-      test_mode ? 'DEC' : 'PRD'
+      test_mode ? 'AUT' : 'PRD'
     end
 
   end
