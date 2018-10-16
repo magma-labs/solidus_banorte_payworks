@@ -2,7 +2,7 @@ module Spree
   class Gateway::BanortePayworks2 < ::Spree::CreditCard
     attr_accessor :server, :test_mode, :merchant_id, :user, :password, :terminal_id
 
-    BANORTE_PAYWORKS_URL = 'https://via.pagosbanorte.com/payw2'
+    BANORTE_PAYWORKS_URL = 'https://via.pagosbanorte.com/payw2'.freeze
 
     def purchase(amount, source, gateway_options)
       payload = {
